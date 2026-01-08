@@ -1,13 +1,16 @@
 package com.swc.appointment_booking.dto.response;
 
+import com.swc.appointment_booking.entity.Appointment;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Setter
 @Getter
 public class UserResponseDTO {
 
-    private String id;
+    private Long id;
 
     private String name;
 
@@ -15,5 +18,5 @@ public class UserResponseDTO {
 
     private String role;
 
-    private Long appointmentId;
+    private List<Appointment> appointmentId;
 }
