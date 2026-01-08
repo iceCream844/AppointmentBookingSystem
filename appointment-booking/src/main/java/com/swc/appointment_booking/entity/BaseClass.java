@@ -1,4 +1,4 @@
-package entity;
+package com.swc.appointment_booking.entity;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

@@ -1,4 +1,4 @@
-package service.Common;
+package com.swc.appointment_booking.service.common;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

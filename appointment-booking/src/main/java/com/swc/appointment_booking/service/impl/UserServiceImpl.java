@@ -1,10 +1,10 @@
-package service.Impl;
+package com.swc.appointment_booking.service.impl;
 
-import dto.response.UserResponseDTO;
-import dto.resquest.UserRequestDTO;
+import com.swc.appointment_booking.dto.response.UserResponseDTO;
+import com.swc.appointment_booking.dto.resquest.UserRequestDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import service.UserService;
+import com.swc.appointment_booking.service.UserService;
 
 public class UserServiceImpl implements UserService {
     @Override

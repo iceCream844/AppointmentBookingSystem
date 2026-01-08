@@ -1,5 +1,10 @@
-package dto.response;
+package com.swc.appointment_booking.dto.response;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class UserResponseDTO {
 
     private String id;

@@ -1,6 +1,6 @@
-package entity;
+package com.swc.appointment_booking.entity;
 
-import enums.UserRole;
+import com.swc.appointment_booking.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
