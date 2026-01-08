@@ -8,11 +8,11 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Table(name = "users")
 @Entity
 @Setter
 @Getter
 @NoArgsConstructor
+@Table(name = "users")
 public class User extends BaseClass{
 
     private String name;

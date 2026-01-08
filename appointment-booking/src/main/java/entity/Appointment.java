@@ -10,11 +10,11 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Table(name = "appointments")
 @Entity
 @Setter
 @Getter
 @NoArgsConstructor
+@Table(name = "appointments")
 public class Appointment extends BaseClass {
 
     private LocalDateTime appointmentTime;
