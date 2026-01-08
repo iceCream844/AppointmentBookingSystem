@@ -1,10 +1,10 @@
-package service.Impl;
+package com.swc.appointment_booking.service.impl;
 
-import dto.response.AppointmentResponseDTO;
-import dto.resquest.AppointmentRequestDTO;
+import com.swc.appointment_booking.dto.response.AppointmentResponseDTO;
+import com.swc.appointment_booking.dto.resquest.AppointmentRequestDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import service.AppointmentService;
+import com.swc.appointment_booking.service.AppointmentService;
 
 public class AppointmentServiceImpl implements AppointmentService {
 
