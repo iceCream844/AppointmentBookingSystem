@@ -56,12 +56,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO update(Long aLong, UserRequestDTO dto) {
-        return null;
+    public UserResponseDTO update(Long id, UserRequestDTO dto) {
+        UserResponseDTO responseDTO = new UserResponseDTO();
+        User user = userRepository.findById(id).orElseGet(null);
+
+        user.setRole(UserRole.valueOf(dto.getRole()));
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        userRepository.save(user);
+
+        return responseDTO;
     }
 
     @Override
     public void deleteById(Long id) {
-        log.debug("i love you");
+        User user = userRepository.findById(id).orElseGet(null);
+        userRepository.delete(user);
     }
 }
