@@ -1,4 +1,4 @@
-package com.swc.appointment_booking.dto.resquest;
+package com.swc.appointment_booking.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;

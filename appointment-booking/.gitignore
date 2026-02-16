@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Local environment config (DO NOT COMMIT SECRETS)
+application-local.properties
+.idea/

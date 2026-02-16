@@ -1,7 +1,7 @@
 package com.swc.appointment_booking.service.impl;
 
 import com.swc.appointment_booking.dto.response.UserResponseDTO;
-import com.swc.appointment_booking.dto.resquest.UserRequestDTO;
+import com.swc.appointment_booking.dto.request.UserRequestDTO;
 import com.swc.appointment_booking.entity.User;
 import com.swc.appointment_booking.enums.UserRole;
 import com.swc.appointment_booking.repository.UserRepository;
@@ -9,10 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.swc.appointment_booking.service.UserService;
-
-import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 @Slf4j
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;

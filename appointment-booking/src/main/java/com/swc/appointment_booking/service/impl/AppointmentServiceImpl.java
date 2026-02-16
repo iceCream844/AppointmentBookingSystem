@@ -1,7 +1,7 @@
 package com.swc.appointment_booking.service.impl;
 
 import com.swc.appointment_booking.dto.response.AppointmentResponseDTO;
-import com.swc.appointment_booking.dto.resquest.AppointmentRequestDTO;
+import com.swc.appointment_booking.dto.request.AppointmentRequestDTO;
 import com.swc.appointment_booking.entity.Appointment;
 import com.swc.appointment_booking.entity.User;
 import com.swc.appointment_booking.repository.AppointmentRepository;
@@ -9,7 +9,12 @@ import com.swc.appointment_booking.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.swc.appointment_booking.service.AppointmentService;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
 public class AppointmentServiceImpl implements AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
@@ -72,7 +77,28 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public AppointmentResponseDTO findByEmail(Long id) {
-        return null;
+    public List<AppointmentResponseDTO> findByUser(String email, String name) {
+        List<Appointment> list = new ArrayList<>();
+        if (!String.valueOf(email).isEmpty()) {
+            list = appointmentRepository.findByUserEmail(email);
+        }else if (!String.valueOf(name).isEmpty()){
+            list = appointmentRepository.findByUserName(name);
+        }
+
+        return list.stream()
+                .map(a -> {
+                    AppointmentResponseDTO dto = new AppointmentResponseDTO();
+                    dto.setId(a.getId());
+                    dto.setAppointmentTime(a.getAppointmentTime());
+                    dto.setStatus(a.getStatus());
+
+                    if (a.getUser() != null) {
+                        dto.setUserId(a.getUser().getId());
+                    }
+
+                    return dto;
+                })
+                .toList();
+
     }
 }
