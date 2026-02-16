@@ -1,6 +1,5 @@
 package com.swc.appointment_booking.dto.response;
 
-import com.swc.appointment_booking.entity.Appointment;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,5 +17,5 @@ public class UserResponseDTO {
 
     private String role;
 
-    private List<Appointment> appointmentId;
+    private List<AppointmentSummaryDTO> appointments;
 }

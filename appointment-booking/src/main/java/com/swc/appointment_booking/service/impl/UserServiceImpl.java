@@ -1,5 +1,6 @@
 package com.swc.appointment_booking.service.impl;
 
+import com.swc.appointment_booking.dto.response.AppointmentSummaryDTO;
 import com.swc.appointment_booking.dto.response.UserResponseDTO;
 import com.swc.appointment_booking.dto.request.UserRequestDTO;
 import com.swc.appointment_booking.entity.User;
@@ -36,18 +37,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO findById(Long id) {
+
+        User user = userRepository.findById(id).orElse(null);
+
         UserResponseDTO responseDTO = new UserResponseDTO();
-
-        User user = userRepository.findById(id).orElseGet(null);
-
-        responseDTO.setRole(user.getRole().toString());
+        responseDTO.setId(user.getId());
         responseDTO.setName(user.getName());
         responseDTO.setEmail(user.getEmail());
-        responseDTO.setId(user.getId());
-        responseDTO.setAppointmentId(user.getAppointments());
+        responseDTO.setRole(user.getRole().toString());
+
+        if (user.getAppointments() != null) {
+            responseDTO.setAppointments(
+                    user.getAppointments()
+                            .stream()
+                            .map(appointment -> {
+                                AppointmentSummaryDTO summary = new AppointmentSummaryDTO();
+                                summary.setId(appointment.getId());
+                                summary.setAppointmentTime(appointment.getAppointmentTime());
+                                summary.setStatus(appointment.getStatus());
+                                return summary;
+                            })
+                            .toList()
+            );
+        }
 
         return responseDTO;
-
     }
 
     @Override
@@ -58,7 +72,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDTO update(Long id, UserRequestDTO dto) {
         UserResponseDTO responseDTO = new UserResponseDTO();
-        User user = userRepository.findById(id).orElseGet(null);
+        User user = userRepository.findById(id).orElse(null);
 
         user.setRole(UserRole.valueOf(dto.getRole()));
         user.setName(dto.getName());
@@ -70,7 +84,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(Long id) {
-        User user = userRepository.findById(id).orElseGet(null);
+        User user = userRepository.findById(id).orElse(null);
         userRepository.delete(user);
     }
 }
