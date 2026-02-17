@@ -1,6 +1,9 @@
 package com.swc.appointment_booking.entity;
 
+import com.swc.appointment_booking.enums.AppointmentStatus;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -19,10 +22,11 @@ public class Appointment extends BaseClass {
 
     private LocalDateTime appointmentTime;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id" , nullable = false)
     private User user;
 
 }

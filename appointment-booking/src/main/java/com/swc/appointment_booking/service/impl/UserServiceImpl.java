@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
                                 AppointmentSummaryDTO summary = new AppointmentSummaryDTO();
                                 summary.setId(appointment.getId());
                                 summary.setAppointmentTime(appointment.getAppointmentTime());
-                                summary.setStatus(appointment.getStatus());
+                                summary.setStatus(String.valueOf(appointment.getStatus()));
                                 return summary;
                             })
                             .toList()

@@ -4,6 +4,7 @@ import com.swc.appointment_booking.dto.response.AppointmentResponseDTO;
 import com.swc.appointment_booking.dto.request.AppointmentRequestDTO;
 import com.swc.appointment_booking.entity.Appointment;
 import com.swc.appointment_booking.entity.User;
+import com.swc.appointment_booking.enums.AppointmentStatus;
 import com.swc.appointment_booking.repository.AppointmentRepository;
 import com.swc.appointment_booking.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -30,7 +31,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         Appointment appointment = new Appointment();
         User user = userRepository.findById(dto.getUserId()).orElse(null);
 
-        appointment.setStatus(dto.getStatus());
+        appointment.setStatus(AppointmentStatus.valueOf(dto.getStatus()));
         appointment.setAppointmentTime(dto.getAppointmentTime());
         appointment.setUser(user);
         appointmentRepository.save(appointment);
@@ -46,7 +47,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         responseDTO.setAppointmentTime(appointment.getAppointmentTime());
         responseDTO.setId(appointment.getId());
         responseDTO.setUserId(appointment.getUser().getId());
-        responseDTO.setStatus(appointment.getStatus());
+        responseDTO.setStatus(String.valueOf(appointment.getStatus()));
 
         return responseDTO;
     }
@@ -61,7 +62,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         Appointment appointment = appointmentRepository.findById(id).orElse(null);
         User user = userRepository.findById(dto.getUserId()).orElse(null);
 
-        appointment.setStatus(dto.getStatus());
+        appointment.setStatus(AppointmentStatus.valueOf(dto.getStatus()));
         appointment.setAppointmentTime(dto.getAppointmentTime());
         appointment.setUser(user);
         appointmentRepository.save(appointment);
@@ -90,7 +91,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                     AppointmentResponseDTO dto = new AppointmentResponseDTO();
                     dto.setId(a.getId());
                     dto.setAppointmentTime(a.getAppointmentTime());
-                    dto.setStatus(a.getStatus());
+                    dto.setStatus(String.valueOf(a.getStatus()));
 
                     if (a.getUser() != null) {
                         dto.setUserId(a.getUser().getId());
