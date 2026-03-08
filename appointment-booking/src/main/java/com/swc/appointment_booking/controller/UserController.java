@@ -5,6 +5,8 @@ import com.swc.appointment_booking.dto.response.UserResponseDTO;
 import com.swc.appointment_booking.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,28 +20,35 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponseDTO create(@RequestBody UserRequestDTO dto) {
-        return userService.create(dto);
+    public ResponseEntity<UserResponseDTO> create(@RequestBody UserRequestDTO dto) {
+
+        UserResponseDTO response = userService.create(dto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
 
     @GetMapping("/{id}")
-    public UserResponseDTO findById(@PathVariable Long id) {
-        return userService.findById(id);
+    public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.findById(id));
     }
 
     @GetMapping
-    public Page<UserResponseDTO> findAll(Pageable pageable) {
-        return userService.findAll(pageable);
+    public ResponseEntity<Page<UserResponseDTO>> findAll(Pageable pageable) {
+        return ResponseEntity.ok(userService.findAll(pageable));
     }
 
     @PutMapping("/{id}")
-    public UserResponseDTO update(@PathVariable Long id,
-                                  @RequestBody UserRequestDTO dto) {
-        return userService.update(id, dto);
+    public ResponseEntity<UserResponseDTO> update(
+            @PathVariable Long id,
+            @RequestBody UserRequestDTO dto) {
+
+        return ResponseEntity.ok(userService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

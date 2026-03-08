@@ -1,5 +1,6 @@
 package com.swc.appointment_booking.service.impl;
 
+import com.swc.appointment_booking.converter.UserMapper;
 import com.swc.appointment_booking.dto.response.AppointmentSummaryDTO;
 import com.swc.appointment_booking.dto.response.UserResponseDTO;
 import com.swc.appointment_booking.dto.request.UserRequestDTO;
@@ -17,9 +18,11 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -30,9 +33,9 @@ public class UserServiceImpl implements UserService {
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
         user.setRole(UserRole.valueOf(dto.getRole()));
-        userRepository.save(user);
+        User saved = userRepository.save(user);
 
-        return null;
+        return userMapper.mapToResponse(saved);
     }
 
     @Override
@@ -66,7 +69,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserResponseDTO> findAll(Pageable pageable) {
-        return null;
+
+        Page<User> users = userRepository.findAll(pageable);
+
+        return users.map(user -> {
+            UserResponseDTO dto = new UserResponseDTO();
+            dto.setId(user.getId());
+            dto.setName(user.getName());
+            dto.setEmail(user.getEmail());
+            dto.setRole(user.getRole().toString());
+            return dto;
+        });
     }
 
     @Override

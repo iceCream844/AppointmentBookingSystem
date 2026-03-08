@@ -5,6 +5,8 @@ import com.swc.appointment_booking.dto.response.AppointmentResponseDTO;
 import com.swc.appointment_booking.service.AppointmentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,36 +22,42 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public AppointmentResponseDTO create(@RequestBody AppointmentRequestDTO dto) {
-        return appointmentService.create(dto);
+    public ResponseEntity<AppointmentResponseDTO> create(@RequestBody AppointmentRequestDTO dto) {
+        AppointmentResponseDTO response = appointmentService.create(dto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
 
     @GetMapping("/{id}")
-    public AppointmentResponseDTO findById(@PathVariable Long id) {
-        return appointmentService.findById(id);
+    public ResponseEntity<AppointmentResponseDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(appointmentService.findById(id));
     }
 
     @GetMapping
-    public Page<AppointmentResponseDTO> findAll(Pageable pageable) {
-        return appointmentService.findAll(pageable);
+    public ResponseEntity<Page<AppointmentResponseDTO>> findAll(Pageable pageable) {
+        return ResponseEntity.ok(appointmentService.findAll(pageable));
     }
 
     @PutMapping("/{id}")
-    public AppointmentResponseDTO update(@PathVariable Long id,
-                                         @RequestBody AppointmentRequestDTO dto) {
-        return appointmentService.update(id, dto);
+    public ResponseEntity<AppointmentResponseDTO> update(
+            @PathVariable Long id,
+            @RequestBody AppointmentRequestDTO dto) {
+
+        return ResponseEntity.ok(appointmentService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         appointmentService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/search")
-    public List<AppointmentResponseDTO> findByUser(
+    public ResponseEntity<List<AppointmentResponseDTO>> findByUser(
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String name) {
 
-        return appointmentService.findByUser(email, name);
+        return ResponseEntity.ok(appointmentService.findByUser(email, name));
     }
 }

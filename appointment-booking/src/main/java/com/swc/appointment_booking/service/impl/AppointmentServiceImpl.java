@@ -54,7 +54,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Page<AppointmentResponseDTO> findAll(Pageable pageable) {
-        return null;
+        Page<Appointment> appointments = appointmentRepository.findAll(pageable);
+
+        return  appointments.map(appointment -> {
+            AppointmentResponseDTO dto = new AppointmentResponseDTO();
+            dto.setStatus(String.valueOf(appointment.getStatus()));
+            dto.setId(appointment.getId());
+            dto.setAppointmentTime(appointment.getAppointmentTime());
+            dto.setUserId(appointment.getUser().getId());
+            return dto;
+        });
     }
 
     @Override
@@ -72,9 +81,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public void deleteById(Long id) {
         Appointment appointment = appointmentRepository.findById(id).orElse(null);
-
         appointmentRepository.delete(appointment);
-
     }
 
     @Override
