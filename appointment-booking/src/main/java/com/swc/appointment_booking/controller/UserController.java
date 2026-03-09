@@ -3,6 +3,7 @@ package com.swc.appointment_booking.controller;
 import com.swc.appointment_booking.dto.request.UserRequestDTO;
 import com.swc.appointment_booking.dto.response.UserResponseDTO;
 import com.swc.appointment_booking.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> create(@RequestBody UserRequestDTO dto) {
+    public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody UserRequestDTO dto) {
 
         UserResponseDTO response = userService.create(dto);
         return ResponseEntity
@@ -39,7 +40,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> update(
+    public ResponseEntity<UserResponseDTO> update(@Valid
             @PathVariable Long id,
             @RequestBody UserRequestDTO dto) {
 

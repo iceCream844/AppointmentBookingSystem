@@ -3,6 +3,7 @@ package com.swc.appointment_booking.controller;
 import com.swc.appointment_booking.dto.request.AppointmentRequestDTO;
 import com.swc.appointment_booking.dto.response.AppointmentResponseDTO;
 import com.swc.appointment_booking.service.AppointmentService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AppointmentResponseDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<AppointmentResponseDTO> findById(@Valid @PathVariable Long id) {
         return ResponseEntity.ok(appointmentService.findById(id));
     }
 
@@ -40,7 +41,7 @@ public class AppointmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AppointmentResponseDTO> update(
+    public ResponseEntity<AppointmentResponseDTO> update(@Valid
             @PathVariable Long id,
             @RequestBody AppointmentRequestDTO dto) {
 
