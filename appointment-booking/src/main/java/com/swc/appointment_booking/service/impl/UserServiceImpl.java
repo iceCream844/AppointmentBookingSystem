@@ -6,6 +6,7 @@ import com.swc.appointment_booking.dto.response.UserResponseDTO;
 import com.swc.appointment_booking.dto.request.UserRequestDTO;
 import com.swc.appointment_booking.entity.User;
 import com.swc.appointment_booking.enums.UserRole;
+import com.swc.appointment_booking.exception.ResourceNotFoundException;
 import com.swc.appointment_booking.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDTO findById(Long id) {
 
-        User user = userRepository.findById(id).orElse(null);
+        User user = getAndCheckUserExist(id);
 
         UserResponseDTO responseDTO = new UserResponseDTO();
         responseDTO.setId(user.getId());
@@ -72,32 +73,32 @@ public class UserServiceImpl implements UserService {
 
         Page<User> users = userRepository.findAll(pageable);
 
-        return users.map(user -> {
-            UserResponseDTO dto = new UserResponseDTO();
-            dto.setId(user.getId());
-            dto.setName(user.getName());
-            dto.setEmail(user.getEmail());
-            dto.setRole(user.getRole().toString());
-            return dto;
-        });
+        return users.map(userMapper::mapToResponse);
     }
 
     @Override
     public UserResponseDTO update(Long id, UserRequestDTO dto) {
-        UserResponseDTO responseDTO = new UserResponseDTO();
-        User user = userRepository.findById(id).orElse(null);
+
+        User user = getAndCheckUserExist(id);
 
         user.setRole(UserRole.valueOf(dto.getRole()));
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
-        userRepository.save(user);
+        User saved = userRepository.save(user);
 
-        return responseDTO;
+        return userMapper.mapToResponse(saved);
     }
 
     @Override
     public void deleteById(Long id) {
-        User user = userRepository.findById(id).orElse(null);
+
+       User user = getAndCheckUserExist(id);
+
         userRepository.delete(user);
+    }
+
+    private User getAndCheckUserExist(Long id){
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID:" + id));
     }
 }
