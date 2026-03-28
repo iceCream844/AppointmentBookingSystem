@@ -82,9 +82,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<AppointmentResponseDTO> findByUser(String email, String name) {
         List<Appointment> list = new ArrayList<>();
-        if (!String.valueOf(email).isEmpty()) {
+        if (email != null && !email.isBlank()) {
             list = appointmentRepository.findByUserEmail(email);
-        } else if (!String.valueOf(name).isEmpty()) {
+        } else if (name != null && !name.isBlank()) {
             list = appointmentRepository.findByUserName(name);
         }
         return list.stream()
