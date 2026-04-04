@@ -16,6 +16,4 @@ public class AppointmentRequestDTO {
     @NotNull(message = "Appointment status is required")
     String status;
 
-    @NotNull(message = "User id is required")
-    Long userId;
 }
