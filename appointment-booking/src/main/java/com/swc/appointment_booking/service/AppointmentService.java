@@ -10,5 +10,7 @@ public interface AppointmentService extends BaseService<AppointmentRequestDTO, A
 
     List<AppointmentResponseDTO> findByUser(String email, String name);
 
+    List<AppointmentResponseDTO> getMyAppointments();
+
 
 }

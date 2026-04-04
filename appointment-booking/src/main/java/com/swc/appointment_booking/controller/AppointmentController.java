@@ -24,6 +24,7 @@ public class AppointmentController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<AppointmentResponseDTO> create(@Valid @RequestBody AppointmentRequestDTO dto) {
         AppointmentResponseDTO response = appointmentService.create(dto);
         return ResponseEntity
@@ -32,8 +33,15 @@ public class AppointmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AppointmentResponseDTO> findById(@Valid @PathVariable Long id) {
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<AppointmentResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(appointmentService.findById(id));
+    }
+
+    @GetMapping("/my")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<AppointmentResponseDTO>> getMyAppointments() {
+        return ResponseEntity.ok(appointmentService.getMyAppointments());
     }
 
     @GetMapping
@@ -43,6 +51,7 @@ public class AppointmentController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<AppointmentResponseDTO> update(@Valid
             @PathVariable Long id,
             @RequestBody AppointmentRequestDTO dto) {
@@ -51,6 +60,7 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         appointmentService.deleteById(id);
         return ResponseEntity.noContent().build();

@@ -12,6 +12,8 @@ import com.swc.appointment_booking.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.swc.appointment_booking.service.AppointmentService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public AppointmentResponseDTO create(AppointmentRequestDTO dto) {
         Appointment appointment = new Appointment();
-        User user = getAndCheckUserExist(dto.getUserId());
+        User user = getCurrentUser();
 
         appointment.setStatus(AppointmentStatus.valueOf(dto.getStatus()));
         appointment.setAppointmentTime(dto.getAppointmentTime());
@@ -48,7 +50,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         Appointment appointment = getAndCheckAppointmentExist(id);
 
-
         return appointmentMapper.mapToResponse(appointment);
     }
 
@@ -57,14 +58,13 @@ public class AppointmentServiceImpl implements AppointmentService {
         Page<Appointment> appointments = appointmentRepository.findAll(pageable);
 
         return appointments.map(appointmentMapper::mapToResponse);
-
     }
 
     @Override
     public AppointmentResponseDTO update(Long id, AppointmentRequestDTO dto) {
         Appointment appointment = getAndCheckAppointmentExist(id);
-        User user = getAndCheckUserExist(dto.getUserId());
-
+        checkOwnership(appointment);
+        User user = getCurrentUser();
         appointment.setStatus(AppointmentStatus.valueOf(dto.getStatus()));
         appointment.setAppointmentTime(dto.getAppointmentTime());
         appointment.setUser(user);
@@ -76,6 +76,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public void deleteById(Long id) {
         Appointment appointment = getAndCheckAppointmentExist(id);
+        checkOwnership(appointment);
         appointmentRepository.delete(appointment);
     }
 
@@ -90,7 +91,17 @@ public class AppointmentServiceImpl implements AppointmentService {
         return list.stream()
                 .map(appointmentMapper::mapToResponse)
                 .toList();
+    }
 
+    @Override
+    public List<AppointmentResponseDTO> getMyAppointments() {
+        User user = getCurrentUser();
+
+        List<Appointment> list = appointmentRepository.findByUserEmail(user.getEmail());
+
+        return list.stream()
+                .map(appointmentMapper::mapToResponse)
+                .toList();
     }
 
     private Appointment getAndCheckAppointmentExist(Long id) {
@@ -98,8 +109,18 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment not found with ID:" + id));
     }
 
-    private User getAndCheckUserExist(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID:" + id));
+    private User getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+
+    private void checkOwnership(Appointment appointment) {
+        User currentUser = getCurrentUser();
+
+        if ((appointment.getUser().getId())!=(currentUser.getId())) {
+            throw new RuntimeException("Forbidden");
+        }
     }
 }
