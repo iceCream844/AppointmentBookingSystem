@@ -23,7 +23,7 @@ public class AppointmentController {
         this.appointmentService = appointmentService;
     }
 
-    @PostMapping
+    @PostMapping()
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<AppointmentResponseDTO> create(@Valid @RequestBody AppointmentRequestDTO dto) {
         AppointmentResponseDTO response = appointmentService.create(dto);

@@ -6,6 +6,8 @@ import com.swc.appointment_booking.dto.request.AppointmentRequestDTO;
 import com.swc.appointment_booking.entity.Appointment;
 import com.swc.appointment_booking.entity.User;
 import com.swc.appointment_booking.enums.AppointmentStatus;
+import com.swc.appointment_booking.enums.UserRole;
+import com.swc.appointment_booking.exception.ForbiddenException;
 import com.swc.appointment_booking.exception.ResourceNotFoundException;
 import com.swc.appointment_booking.repository.AppointmentRepository;
 import com.swc.appointment_booking.repository.UserRepository;
@@ -119,8 +121,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     private void checkOwnership(Appointment appointment) {
         User currentUser = getCurrentUser();
 
-        if ((appointment.getUser().getId())!=(currentUser.getId())) {
-            throw new RuntimeException("Forbidden");
+        if (currentUser.getRole() == UserRole.ADMIN) {
+            return;
+        }
+
+        if (appointment.getUser().getId() != currentUser.getId()) {
+            throw new ForbiddenException("You are not allowed to modify this appointment.");
         }
     }
 }
