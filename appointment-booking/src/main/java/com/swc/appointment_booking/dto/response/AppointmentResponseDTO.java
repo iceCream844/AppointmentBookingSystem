@@ -16,4 +16,8 @@ public class AppointmentResponseDTO {
     String status;
 
     Long userId;
+
+    String userName;
+
+    String userEmail;
 }

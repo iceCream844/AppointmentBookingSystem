@@ -13,6 +13,8 @@ public class AppointmentMapper {
         dto.setAppointmentTime(appointment.getAppointmentTime());
         dto.setUserId(appointment.getUser().getId());
         dto.setStatus(appointment.getStatus().toString());
+        dto.setUserName(appointment.getUser().getName());
+        dto.setUserEmail(appointment.getUser().getEmail());
         return dto;
     }
 }

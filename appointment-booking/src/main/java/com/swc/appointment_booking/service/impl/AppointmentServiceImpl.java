@@ -66,10 +66,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     public AppointmentResponseDTO update(Long id, AppointmentRequestDTO dto) {
         Appointment appointment = getAndCheckAppointmentExist(id);
         checkOwnership(appointment);
-        User user = getCurrentUser();
         appointment.setStatus(AppointmentStatus.valueOf(dto.getStatus()));
         appointment.setAppointmentTime(dto.getAppointmentTime());
-        appointment.setUser(user);
         Appointment saved = appointmentRepository.save(appointment);
 
         return appointmentMapper.mapToResponse(saved);

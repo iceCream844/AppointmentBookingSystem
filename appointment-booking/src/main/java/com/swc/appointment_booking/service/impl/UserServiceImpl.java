@@ -86,10 +86,14 @@ public class UserServiceImpl implements UserService {
 
         User user = getAndCheckUserExist(id);
 
-        user.setRole(UserRole.valueOf(dto.getRole()));
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setRole(UserRole.valueOf(dto.getRole()));
+
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
         User saved = userRepository.save(user);
 
         return userMapper.mapToResponse(saved);
