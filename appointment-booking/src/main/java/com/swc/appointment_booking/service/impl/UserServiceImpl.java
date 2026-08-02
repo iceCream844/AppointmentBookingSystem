@@ -49,11 +49,7 @@ public class UserServiceImpl implements UserService {
 
         User user = getAndCheckUserExist(id);
 
-        UserResponseDTO responseDTO = new UserResponseDTO();
-        responseDTO.setId(user.getId());
-        responseDTO.setName(user.getName());
-        responseDTO.setEmail(user.getEmail());
-        responseDTO.setRole(user.getRole().toString());
+        UserResponseDTO  responseDTO =  userMapper.mapToResponse(user);
 
         if (user.getAppointments() != null) {
             responseDTO.setAppointments(
